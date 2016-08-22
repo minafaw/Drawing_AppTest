@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         private Canvas canvas;
         private Bitmap bgImage;
         private Bitmap bmp;
+        private Point StartPoint = new Point();
 
         public PaintView(Context context) {
             super(context);
@@ -76,12 +78,25 @@ public class MainActivity extends AppCompatActivity {
             mTextPaint.setStyle(Paint.Style.STROKE);
             mTextPaint.setStrokeWidth(3);
             mTextPaint.setColor(Color.BLACK);
-            mTextPaint.setTextSize(200);
+            mTextPaint.setTextSize(300);
+
+            Paint mFillPaint = new Paint();
+            mFillPaint.setStyle(Paint.Style.FILL);
+            mFillPaint.setColor(Color.BLUE);
 
             canvas.drawColor(Color.WHITE);
             canvas.drawBitmap(this.bgImg, 0, 0, bmpPaint);
-            canvas.drawText("ب", 200, 200, mTextPaint);
-            canvas.drawBitmap(this.bmp, 0, 0, this.bmpPaint);
+            String ArabicText = "ب";
+            Rect bounds = new Rect();
+            canvas.drawText(ArabicText, 200, 200, mTextPaint);
+            mTextPaint.getTextBounds(ArabicText , 0 , ArabicText.length() , bounds);
+            Log.v("TextBounds " , "The text bounds Width: " + bounds.width()
+                    + " Height : "+ bounds.height() );
+            // to draw point above letter
+            StartPoint.x = (200 + bounds.width()) ;
+            StartPoint.y= ((200 - bounds.height()) + 20 );
+            canvas.drawCircle((200 + bounds.width()), (200 - bounds.height()) + 20 , 10 ,mFillPaint );
+            //canvas.drawBitmap(this.bmp, 0, 0, this.bmpPaint);
 
             canvas.drawPath(this.path, paint);
 
